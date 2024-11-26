@@ -39,28 +39,26 @@ pip install -r requirements.txt
 
 ### LLMCostTracker
 
-The `LLMCostTracker` class helps you track and accumulate the cost and token usage of your LLM calls.
+The `LLMCostTracker` class helps you track and accumulate the cost and token usage of your LLM calls using LangChain's `get_openai_callback`.
 
 #### Example
 
 ```python
 from llm_cost_tracker import LLMCostTracker
+from langchain.callbacks.manager import get_openai_callback
 
 # Initialize the tracker
 tracker = LLMCostTracker()
 
-# Simulate an LLM call with a callback object 'cb'
-class Callback:
-    def __init__(self, total_cost, prompt_tokens, completion_tokens):
-        self.total_cost = total_cost
-        self.prompt_tokens = prompt_tokens
-        self.completion_tokens = completion_tokens
+# Your LLM chain or function
+def your_llm_chain(docs):
+    # Simulate processing documents
+    return "Processed documents"
 
-# Example callback data
-cb = Callback(total_cost=0.01, prompt_tokens=100, completion_tokens=200)
-
-# Add the call data to the tracker
-tracker.add_call(cb)
+# Use the OpenAI callback to track cost and tokens
+with get_openai_callback() as cb:
+    response = your_llm_chain(docs)
+    tracker.add_call(cb)
 
 # Get total costs and tokens
 totals = tracker.get_totals()
@@ -72,6 +70,8 @@ print(totals)
 ```
 {'total_cost': 0.01, 'input_tokens': 100, 'output_tokens': 200}
 ```
+
+*Note: Replace `your_llm_chain` and `docs` with your actual LLM chain and documents.*
 
 #### Methods
 
@@ -137,6 +137,10 @@ Contributions are welcome! If you'd like to help improve this project, please:
 
 For major changes, please open an issue first to discuss what you'd like to change.
 
+## License
+
+This project is licensed under the terms of the MIT license.
+
 ## Future Plans
 
 - **Additional Models**: Support for more LLM and embedding models.
@@ -147,3 +151,51 @@ For major changes, please open an issue first to discuss what you'd like to chan
 ---
 
 *By using the LLM and Embedding Cost Tracker, you can efficiently monitor and manage the costs associated with your LLM and embedding operations, making your development process smoother and more cost-effective.*
+
+# Corrected Usage Explanation
+
+In the previous version, the usage example for `LLMCostTracker` simulated an LLM call with a custom `Callback` class. However, you can simplify the process by leveraging LangChain's `get_openai_callback` for more accurate tracking.
+
+Here's how you can use `get_openai_callback`:
+
+```python
+from llm_cost_tracker import LLMCostTracker
+from langchain.callbacks.manager import get_openai_callback
+
+# Initialize the tracker
+tracker = LLMCostTracker()
+
+# Your LLM chain or function
+def your_llm_chain(docs):
+    # Simulate processing documents
+    return "Processed documents"
+
+# Use the OpenAI callback to track cost and tokens
+with get_openai_callback() as cb:
+    response = your_llm_chain(docs)
+    tracker.add_call(cb)
+
+# Get total costs and tokens
+totals = tracker.get_totals()
+print(totals)
+```
+
+This approach simplifies the usage by directly utilizing LangChain's callback mechanism, which automatically captures the necessary cost and token data during LLM calls.
+
+---
+
+**Note:** Make sure to install `langchain` in your environment:
+
+```bash
+pip install langchain
+```
+
+And import `get_openai_callback` from `langchain.callbacks.manager` instead of `langchain_community.callbacks.manager`:
+
+```python
+from langchain.callbacks.manager import get_openai_callback
+```
+
+---
+
+By updating the usage example to reflect this simplified method, you can integrate `LLMCostTracker` more seamlessly into your projects.
