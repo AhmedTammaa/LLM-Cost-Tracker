@@ -30,12 +30,10 @@ Welcome to the **LLM and Embedding Cost Tracker**! This Python library provides 
 Clone the repository and install the required packages:
 
 ```bash
-git clone https://github.com/yourusername/llm-cost-tracker.git
+git clone https://github.com/AhmedTammaa/llm-cost-tracker.git
 cd llm-cost-tracker
 pip install -r requirements.txt
 ```
-
-*Replace `yourusername` with your actual GitHub username.*
 
 ## Usage
 
